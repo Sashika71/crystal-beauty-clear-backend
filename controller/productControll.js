@@ -11,7 +11,7 @@ export function createProduct(req,res){
 
 
 
-    // if (req.user.role!='admin'){
+    // if (req.data.user.role!='admin'){
     //     res.status(403).json({
     //         message:"you are not allowed to add product"
     //     })
@@ -67,7 +67,7 @@ export function deleteProduct(req, res) {
     }
 const productId = req.params.id;
 
-    Product.findByIdAndDelete(productId)
+    Product.findOneAndDelete({ productId: productId })
         .then(product => {
             if (!product) {
                 res.status(404).json({
@@ -104,7 +104,7 @@ export function updateProduct(req, res) {
 
     const productId = req.params.id;
 
-    Product.findByIdAndUpdate(productId, req.body, { new: true })
+    Product.findOneAndUpdate({ productId: productId }, req.body, { new: true })
         .then(product => {
             if (!product) {
                 res.status(404).json({
@@ -124,5 +124,25 @@ export function updateProduct(req, res) {
             });
         });
 }
+export async function getProductById(req, res) {
+    const productId = req.params.id;
+    
+    
+        const product = await Product.findOne({ productId: productId });
+
+        if (product==null) {
+             res.status(404).json({
+                message: "Product not found"
+
+            })
+            return
+        }
+
+        res.json({
+            product: product
+        })
+    } 
+
+
 
 

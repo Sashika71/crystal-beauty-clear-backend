@@ -1,5 +1,5 @@
 import express from 'express';
- import { createProduct, getProducts,deleteProduct, updateProduct } from '../controller/productControll.js';
+ import { createProduct, getProducts,deleteProduct, updateProduct, getProductById } from '../controller/productControll.js';
 
  const productRouter=express.Router();
 
@@ -8,6 +8,7 @@ import express from 'express';
  productRouter.get('/',getProducts)
 productRouter.delete('/:id', deleteProduct);
 productRouter.put('/:id', updateProduct);
+productRouter.get('/:id',getProductById);
 
 
 

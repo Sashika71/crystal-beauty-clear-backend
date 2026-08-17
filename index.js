@@ -6,22 +6,28 @@ import jwt from 'jsonwebtoken';
 import productRouter from './routes/productRouter.js';
 import { verifyJWT } from './middlewear/auth.js';
 import orderRouter from './routes/orderRouter.js';
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
+import reviewRouter from "./routes/reviewRouter.js";
+   
+const mongoUri = process.env.MONGODB_URI;
 
- 
-mongoose.connect("mongodb+srv://admin:20020701@cluster0.ux3l1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").then(
-    ()=>{
+mongoose
+    .connect(mongoUri)
+    .then(() => {
         console.log('connected to mongodb');
-    }
-)
-.catch(
-    ()=>{
-        console.log("connection failed");
-    }
-)
+    })
+    .catch((error) => {
+        console.log('connection failed:', error.message);
+    });
 
 
 
 let app=express();
+
+app.use(cors());
+
 app.use(bodyParser.json());
 app.use(verifyJWT);
 
@@ -29,7 +35,7 @@ app.use(verifyJWT);
 app.use("/api/user",userRouter);
 app.use('/api/product',productRouter);
 app.use('/api/order',orderRouter);
-
+app.use('/api/review',reviewRouter);
 app.get('/',
     (req,res)=>{
         Student.find().then(
