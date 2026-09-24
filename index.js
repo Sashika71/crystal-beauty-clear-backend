@@ -10,6 +10,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 import reviewRouter from "./routes/reviewRouter.js";
+import chatRouter from './routes/chatRouter.js';
    
 const mongoUri = process.env.MONGODB_URI;
 
@@ -28,7 +29,9 @@ let app=express();
 
 app.use(cors());
 
+
 app.use(bodyParser.json());
+app.use('/api/chat', chatRouter);
 app.use(verifyJWT);
 
 
@@ -53,33 +56,7 @@ app.get('/',
      
 })
 
-app.post('/',
-    (req,res)=>{
-         const student=new Student(req.body);
-          student.save().then(
-            ()=>{
-                res.json(
-                    {
-                        message:"student saved"
-                    }
-                )
-            }
-          )
-          .catch(
-            ()=>{
-                res.json(
-                    {
-                        message:"student ot saved"
-                    }
-                )
-            }
-          )
-   
-           
-            
-          
-    }
-)
+
 
 
 
